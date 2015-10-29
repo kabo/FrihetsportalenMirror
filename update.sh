@@ -7,7 +7,7 @@ CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
 if [ "$CORRECT_IP" != "$CUR_IP" ]
 then
     echo "Current IP is $CUR_IP, not $CORRECT_IP, exiting."
-    exit 0;
+    exit 0
 fi
 
 cd mirror
@@ -17,6 +17,12 @@ rm -r index.html wp-*
 cp -r mirror/www.frihetsportalen.se/* ./
 sed "/<div id=\"content\"/a ${NOTICE}" index.html -i
 # check if we need git commit
+STATUS_OUTPUT=$(git status -s)
+if [ "x$STATUS_OUTPUT" == "x" ]
+then
+    echo "Nothing to update, exiting"
+    exit 0
+fi
 #git add index.html wp-*
 #git commit -m "automatic update"
 #git push
