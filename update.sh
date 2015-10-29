@@ -15,7 +15,10 @@ httrack --update
 cd ..
 rm -r index.html wp-*
 cp -r mirror/www.frihetsportalen.se/* ./
+# add notice
 sed "/<div id=\"content\"/a ${NOTICE}" index.html -i
+# remove httrack timestamp
+sed -i '/<!-- Mirrored from /d' index.html
 # check if we need git commit
 STATUS_OUTPUT=$(git status -s)
 if [ "x$STATUS_OUTPUT" == "x" ]
