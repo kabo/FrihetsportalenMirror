@@ -23,9 +23,9 @@ sed -i '/<!-- Mirrored from /d' index.html
 STATUS_OUTPUT=$(git status -s)
 if [ "x$STATUS_OUTPUT" == "x" ]
 then
-    echo "Nothing to update, exiting"
+    echo "Nothing to update, exiting."
     exit 0
 fi
-#git add index.html wp-*
-#git commit -m "automatic update"
+git add index.html wp-*
+git commit -m "automatic update"
 #git push
