@@ -1,0 +1,50 @@
+/*
+Theme Name: Fri
+Template: twentyten
+*/
+
+@charset "UTF-8";
+@import url('http://www.frihetsportalen.se/wp-content/themes/twentyten/style.css');
+
+.widget-area .recent-comment {
+	color: #000;
+}
+
+#related-posts-via-taxonomies {
+	float: left;
+	width: 310px;
+	border-top: 1px solid #DDD;
+	padding: 10px 10px 0 0;
+}
+#content #related-posts-via-taxonomies-title {
+	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
+	font-size: 18px;
+	margin: 0;
+}
+#related-posts-via-taxonomies-list {
+	list-style: disc;
+}
+#related-posts-via-taxonomies-list a {
+	text-decoration: none;
+}
+
+div.sharedaddy {
+	width: 320px;
+	float: right;
+}
+div.sharedaddy div.sd-block {
+	padding: 10px 0 0 10px !important;
+}
+div.sharedaddy .sd-content {
+	width: 100% !important;
+	margin: 0 !important;
+}
+div.sharedaddy h3 {
+	font-size: 18px !important;
+	font-weight: normal !important;
+	line-height: 1.5 !important;
+	margin: 0 !important;
+}
+div.sharedaddy .sd-content li {
+	float: none ! important;
+}
