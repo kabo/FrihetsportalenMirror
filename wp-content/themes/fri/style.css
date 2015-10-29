@@ -4,7 +4,7 @@ Template: twentyten
 */
 
 @charset "UTF-8";
-@import url('http://www.frihetsportalen.se/wp-content/themes/twentyten/style.css');
+@import url('../twentyten/style.css');
 
 .widget-area .recent-comment {
 	color: #000;

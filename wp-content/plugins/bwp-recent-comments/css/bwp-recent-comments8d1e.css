@@ -43,7 +43,7 @@
 
 .recent-comment-author {
 	font-weight: bold;
-	background: url("http://www.frihetsportalen.se/wp-content/plugins/bwp-recent-comments/images/icon_comment.png") no-repeat right center;
+	background: url("../images/icon_comment.png") no-repeat right center;
 	padding-right: 20px;
 	overflow: hidden;
 }
