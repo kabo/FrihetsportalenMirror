@@ -2,9 +2,10 @@
 
 NOTICE='<div style=\"padding: 1em; background-color: #d9edf7; border-color: #bce8f1; color: #3a87ad; border-radius: 4px; margin-bottom: 1em;\">Frihetsportalen.se har tekniska problem för tillfället. Du tittar på den senaste backupen som finns tillgänglig, vilket innebär att du kan endast läsa artiklarna på framsidan. Inga länkar, kommentarsfunktioner, etc. fungerar för tillfället.</div>'
 CORRECT_IP='95.183.49.100'
-CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
 GITHUB_IP='192.30.252.153'
-LIMIT=600 # 10 minutes
+LIMIT=580 # 9 minutes, 40 secs
+
+CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
 LOOPIA_CREDENTIALS=$(<loopia_credentials.txt)
 
 function switch_to_ip {
@@ -58,9 +59,12 @@ else
     # https://help.github.com/articles/tips-for-configuring-an-a-record-with-your-dns-provider/
     CUR_TIMESTAMP=$(date "+%s")
     LAST_TIMESTAMP=$(<last_update.txt)
-    if [ $CUR_TIMESTAMP > $(($LAST_TIMESTAMP + $LIMIT)) ]
+    TTL=$(($CUR_TIMESTAMP - $LAST_TIMESTAMP - $LIMIT))
+    if [ "$TTL" -gt 0 ]
     then
-        echo "Outage over limit, switching over"
+        echo "Outage over limit with $TTL secs, switching over."
         switch_to_ip $GITHUB_IP
+    else
+        echo "Not over limit yet, chilling T $TTL secs."
     fi
 fi
