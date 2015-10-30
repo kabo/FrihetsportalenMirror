@@ -9,8 +9,8 @@ CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
 LOOPIA_CREDENTIALS=$(<loopia_credentials.txt)
 
 function switch_to_ip {
-    echo "Would switch to $1"
-    #curl -s --user "${LOOPIA_CREDENTIALS}" "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=frihetsportalen.se&myip=$1"
+    #echo "Would switch to $1"
+    curl -s --user "${LOOPIA_CREDENTIALS}" "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=frihetsportalen.se&myip=$1"
 }
 
 if [ "$CORRECT_IP" != "$CUR_IP" ]
@@ -51,7 +51,7 @@ then
     fi
     git add index.html wp-*
     git commit -m "automatic update"
-    #git push
+    git push
 else
     echo "Server is not responding"
     # If server is down, redirect the domain
