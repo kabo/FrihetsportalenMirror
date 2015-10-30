@@ -4,36 +4,62 @@ NOTICE='<div style=\"padding: 1em; background-color: #d9edf7; border-color: #bce
 CORRECT_IP='95.183.49.100'
 CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
 GITHUB_IP='192.30.252.153'
+LIMIT=600 # 10 minutes
+
+function switch_to_ip {
+    echo "Would switch to $1"
+    #curl -s --user 'användarnamn:lösenord' "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=frihetsportalen.se&myip=$1"
+}
 
 if [ "$CORRECT_IP" != "$CUR_IP" ]
 then
+    echo "Domain IP is $CUR_IP, checking if $CORRECT_IP is up again..."
     # Check if correct server is up again
+    SERVER_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://${CORRECT_IP}/)
     # If correct server is up again, redirect the domain
-    echo "Current IP is $CUR_IP, not $CORRECT_IP, exiting."
+    if [ "403" == "${SERVER_STATUS}" ]
+    then
+        echo "$CORRECT_IP is up, switching over"
+        switch_to_ip $CORRECT_IP
+    fi
     exit 0
 fi
 
-# Check if server is responding
-# If server is down, redirect the domain
-# https://support.loopia.se/wiki/curl/
-# https://help.github.com/articles/tips-for-configuring-an-a-record-with-your-dns-provider/
-
-cd mirror
-httrack --update
-cd ..
-rm -r index.html wp-*
-cp -r mirror/www.frihetsportalen.se/* ./
-# add notice
-sed "/<div id=\"content\"/a ${NOTICE}" index.html -i
-# remove httrack timestamp
-sed -i '/<!-- Mirrored from /d' index.html
-# check if we need git commit
-STATUS_OUTPUT=$(git status -s)
-if [ "x$STATUS_OUTPUT" == "x" ]
+# OK, so we're currently running on our server
+SERVER_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://www.frihetsportalen.se/)
+if [ "200" == "${SERVER_STATUS}" ]
 then
-    echo "Nothing to update, exiting."
-    exit 0
+    echo "Server is responding, taking snapshot..."
+    cd mirror
+    httrack --update
+    cd ..
+    rm -r index.html wp-*
+    cp -r mirror/www.frihetsportalen.se/* ./
+    # add notice
+    sed "/<div id=\"content\"/a ${NOTICE}" index.html -i
+    # remove httrack timestamp
+    sed -i '/<!-- Mirrored from /d' index.html
+    date "+%s" > last_update.txt
+    # check if we need git commit
+    STATUS_OUTPUT=$(git status -s)
+    if [ "x$STATUS_OUTPUT" == "x" ]
+    then
+        echo "Nothing to update, exiting."
+        exit 0
+    fi
+    git add index.html wp-*
+    git commit -m "automatic update"
+    #git push
+else
+    echo "Server is not responding"
+    # If server is down, redirect the domain
+    # https://support.loopia.se/wiki/curl/
+    # https://help.github.com/articles/tips-for-configuring-an-a-record-with-your-dns-provider/
+    CUR_TIMESTAMP=$(date "+%s")
+    LAST_TIMESTAMP=$(<last_update.txt)
+    if [ $CUR_TIMESTAMP > $(($LAST_TIMESTAMP + $LIMIT)) ]
+    then
+        echo "Outage over limit, switching over"
+        switch_to_ip $GITHUB_IP
+    fi
 fi
-git add index.html wp-*
-git commit -m "automatic update"
-#git push
