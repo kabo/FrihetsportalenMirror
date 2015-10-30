@@ -5,10 +5,11 @@ CORRECT_IP='95.183.49.100'
 CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
 GITHUB_IP='192.30.252.153'
 LIMIT=600 # 10 minutes
+LOOPIA_CREDENTIALS=$(<loopia_credentials.txt)
 
 function switch_to_ip {
     echo "Would switch to $1"
-    #curl -s --user 'användarnamn:lösenord' "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=frihetsportalen.se&myip=$1"
+    #curl -s --user "${LOOPIA_CREDENTIALS}" "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=frihetsportalen.se&myip=$1"
 }
 
 if [ "$CORRECT_IP" != "$CUR_IP" ]
