@@ -10,6 +10,7 @@ LOOPIA_CREDENTIALS=$(<loopia_credentials.txt)
 
 function switch_to_ip {
     #echo "Would switch to $1"
+    curl -s --user "${LOOPIA_CREDENTIALS}" "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=www.frihetsportalen.se&myip=$1"
     curl -s --user "${LOOPIA_CREDENTIALS}" "http://dns.loopia.se/XDynDNSServer/XDynDNS.php?hostname=frihetsportalen.se&myip=$1"
 }
 
