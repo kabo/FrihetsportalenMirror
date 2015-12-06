@@ -4,7 +4,8 @@
 
 NOTICE='<div style=\"padding: 1em; background-color: #d9edf7; border-color: #bce8f1; color: #3a87ad; border-radius: 4px; margin-bottom: 1em;\">Frihetsportalen.se har tekniska problem för tillfället. Du tittar på den senaste backupen som finns tillgänglig, vilket innebär att du kan endast läsa artiklarna på framsidan. Inga länkar, kommentarsfunktioner, etc. fungerar för tillfället.</div>'
 CORRECT_IP='95.183.49.100'
-GITHUB_IP='192.30.252.153'
+#GITHUB_IP='23.235.43.133'
+GITHUB_IP=$(host kabo.github.io | egrep -o '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
 LIMIT=580 # 9 minutes, 40 secs
 
 CUR_IP=$(host frihetsportalen.se | head -n1 | cut -d ' ' -f 4)
@@ -31,7 +32,7 @@ then
 fi
 
 # OK, so we're currently running on our server
-SERVER_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://www.frihetsportalen.se/)
+SERVER_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://www.frihetsportalen.se/)
 if [ "200" == "${SERVER_STATUS}" ]
 then
     echo "Server is responding, taking snapshot..."
