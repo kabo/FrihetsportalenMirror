@@ -32,7 +32,7 @@ then
 fi
 
 # OK, so we're currently running on our server
-SERVER_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://www.frihetsportalen.se/)
+SERVER_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://www.frihetsportalen.se/)
 if [ "200" == "${SERVER_STATUS}" ]
 then
     echo "Server is responding, taking snapshot..."
