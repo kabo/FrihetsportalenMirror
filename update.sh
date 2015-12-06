@@ -53,7 +53,7 @@ then
         echo "Nothing to update, exiting."
         exit 0
     fi
-    git add index.html wp-*
+    git add --all index.html wp-*
     git commit -m "automatic update"
     git push
 else
